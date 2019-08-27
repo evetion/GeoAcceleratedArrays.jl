@@ -3,6 +3,10 @@ uuid = "a1bd0a3b-d31e-42b9-ba04-538dc10eeccf"
 authors = ["Maarten Pronk", "Deltares"]
 version = "0.1.0"
 
+[deps]
+AcceleratedArrays = "44e12807-9a19-5591-91cf-c1b4fb89ce64"
+NearestNeighbors = "b8a86587-4115-5ab1-83bc-aa920d37bbce"
+
 [compat]
 julia = "1"
 

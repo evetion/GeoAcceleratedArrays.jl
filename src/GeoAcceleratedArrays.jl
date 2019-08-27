@@ -1,5 +1,9 @@
 module GeoAcceleratedArrays
 
-greet() = print("Hello World!")
+using AcceleratedArrays
+
+include("kdtree.jl")
+
+export KDTreeIndex
 
 end # module
