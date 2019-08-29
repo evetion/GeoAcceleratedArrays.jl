@@ -1,7 +1,9 @@
 using NearestNeighbors
+using AcceleratedArrays
+using StaticArrays
 
 struct KDTreeIndex{I <: DataFreeTree} <: AbstractUniqueIndex
-    dict::I
+    I::I
 end
 
 function KDTreeIndex(A::AbstractArray)
@@ -11,5 +13,32 @@ end
 
 Base.summary(::KDTreeIndex) = "KDTreeIndex"
 
-# tree = injectdata(dftree, data)  # yields a KDTree
-# knn(tree, data[:,1], 3)  # perform operations as usual
+"""Answer using outer bbox of the index."""
+function Base.in(x, a::AcceleratedArray{<:Any, <:Any, <:Any, <:KDTreeIndex})
+    tree = injectdata(a.index.I, a.parent)  # yields a KDTree
+    in(x, tree.hyper_rec)
+end
+
+"""Inside Hyperectangle check."""
+function Base.in(coordinate::Vector{T}, bbox::NearestNeighbors.HyperRectangle{T}) where T
+    length(coordinate) <= length(bbox.mins) || error("Coordinate has more dimensions than the bounding box.")
+    for (i, ax) in enumerate(coordinate)
+        bbox.mins[i] <= ax <= bbox.maxes[i] || return false
+    end
+    true
+end
+
+
+function Base.findfirst(pred::Base.Fix2{typeof(in), NearestNeighbors.HyperSphere{N, T}}, points::AcceleratedArray{<:Any, <:Any, <:Any, <:KDTreeIndex}) where N where T
+    findall(pred, points)[1]  # this will error on empty sets
+end
+
+function Base.findall(pred::Base.Fix2{typeof(in), NearestNeighbors.HyperSphere{N, T}}, points::AcceleratedArray{<:Any, <:Any, <:Any, <:KDTreeIndex}) where N where T
+    tree = injectdata(points.index.I, points.parent)  # yields a KDTree
+    hypersphere = pred.x
+    inrange(tree, hypersphere.center, hypersphere.r, false)
+end
+
+function NearestNeighbors.HyperSphere(coords::Vector{T}, radius::T) where T <: AbstractFloat
+    NearestNeighbors.HyperSphere(SVector{length(coords)}(coords), radius)
+end

@@ -1,8 +1,18 @@
 using GeoAcceleratedArrays
 using AcceleratedArrays
+using NearestNeighbors
 using Test
 
 @testset "GeoAcceleratedArrays.jl" begin
-    # Write your own tests here.
-    aa = accelerate(rand(3, 1000), KDTreeIndex)
+    # Accelerate 1000 points
+    points = rand(1, 1000)
+    acc_points = accelerate(points, KDTreeIndex)
+
+    center = [0.0]
+    radius = 0.1
+    sphere = NearestNeighbors.HyperSphere(center, radius)
+
+    indices = findall(in(sphere), acc_points)
+    in_sphere = acc_points[:, indices]
+    @test all(in_sphere .<= radius)
 end
