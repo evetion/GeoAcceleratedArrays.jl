@@ -1,6 +1,4 @@
 using GeoAcceleratedArrays
-using AcceleratedArrays
-using NearestNeighbors
 using Test
 
 @testset "GeoAcceleratedArrays.jl" begin
@@ -10,7 +8,7 @@ using Test
 
     center = [0.0]
     radius = 0.1
-    sphere = NearestNeighbors.HyperSphere(center, radius)
+    sphere = HyperSphere(center, radius)
 
     indices = findall(in(sphere), acc_points)
     in_sphere = acc_points[:, indices]
