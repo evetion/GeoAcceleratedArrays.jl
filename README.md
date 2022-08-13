@@ -6,9 +6,9 @@
 # GeoAcceleratedArrays
 Accelerate Arrays using Spatial Indexes.
 
-Combines [AcceleratedArrays](https://github.com/andyferris/AcceleratedArrays.jl) with [NearestNeighbors](https://github.com/KristofferC/NearestNeighbors.jl/).
+Combines [AcceleratedArrays](https://github.com/andyferris/AcceleratedArrays.jl) with [LibSpatialIndex](https://github.com/JuliaGeo/LibSpatialIndex.jl).
+Takes inspiration from the Python [rtree](https://github.com/Toblerity/rtree) package.
 
-*this is a work in progress*
 
 ## Install
 ```julia
@@ -18,15 +18,20 @@ Combines [AcceleratedArrays](https://github.com/andyferris/AcceleratedArrays.jl)
 ## Example
 ```julia
 using GeoAcceleratedArrays
+using LibGEOS  # or any other GeoInterface compatible geometries
 
-# Accelerate 1000 points
-points = rand(3, 1000)
-acc_points = accelerate(points, KDTreeIndex)
+p1 = readgeom("POLYGON((0 0,1 0,1 1,0 0))")
+p2 = readgeom("POLYGON((0 0,-1 0,-1 -1,0 0))")
 
-center = [0.5, 0.5, 0.5]
-radius = 0.1
-sphere = HyperSphere(center, radius)
+acc_polys = accelerate([p1, p2], RTreeIndex)
+2-element Vector{Polygon} + RTreeIndex with Extents.Extent{(:X, :Y), Tuple{Tuple{Float64, Float64}, Tuple{Float64, Float64}}}((X = (-1.0, 1.0), Y = (-1.0, 1.0))):
+ Polygon(Ptr{Nothing} @0x00006000030d2d00)
+ Polygon(Ptr{Nothing} @0x00006000030d23a0)
 
-indices = findall(in(sphere), acc_points)
-points_in_sphere = @view acc_points[:, indices]
+aoi = Extents.Extent(X=(0.5, 1), Y=(0.5, 1))
+Extent(X = (0.5, 1.0), Y = (0.5, 1.0))
+
+indices = findall(in(aoi), acc_polys)
+1-element Vector{Int64}:
+ 1
 ```

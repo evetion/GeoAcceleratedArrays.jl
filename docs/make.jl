@@ -9,9 +9,9 @@ makedocs(;
     repo="https://github.com/evetion/GeoAcceleratedArrays.jl/blob/{commit}{path}#L{line}",
     sitename="GeoAcceleratedArrays.jl",
     authors="Maarten Pronk, Deltares",
-    assets=String[],
+    assets=String[]
 )
 
 deploydocs(;
-    repo="github.com/evetion/GeoAcceleratedArrays.jl",
+    repo="github.com/evetion/GeoAcceleratedArrays.jl"
 )
