@@ -47,7 +47,7 @@ end
 
 function Base.findfirst(pred::Base.Fix2{typeof(in),Extent{K,V}}, AA::AcceleratedArray{<:Any,<:Any,<:Any,<:RTreeIndex}) where {N,K,V,T}
     I = findall(pred, AA)
-    length(I) == 0 ? nothing : first(I)
+    isempty(I) ? nothing : first(I)
 end
 
 function Base.findall(pred::Base.Fix2{typeof(in),Extent{K,V}}, AA::AcceleratedArray{<:Any,<:Any,<:Any,<:RTreeIndex}) where {N,K,V,T}
