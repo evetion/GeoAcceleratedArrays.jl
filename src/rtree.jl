@@ -19,12 +19,25 @@ end
 
 Base.summary(R::RTreeIndex) = "RTreeIndex with $(GeoInterface.extent(R))"
 
-function GeoInterface.extent(R::RTreeIndex)
+GeoInterface.isgeometry(::Type{AcceleratedArray{T,N,A,RTreeIndex{I}}} where {T,N,A,I}) = true
+GeoInterface.isgeometry(::Type{RTreeIndex{I}}) where {I} = true
+GeoInterface.geomtrait(::AcceleratedArray{T,N,A,RTreeIndex{I}}) where {T,N,A,I} = GeoInterface.PolygonTrait()
+GeoInterface.geomtrait(::RTreeIndex) where {I} = GeoInterface.PolygonTrait()
+
+function _getbounds(R::RTreeIndex)
     pmins = zeros(2)
     pmaxs = zeros(2)
     ndims = Ref{UInt32}()
     result = LibSpatialIndex.C.Index_GetBounds(R.I.index, pointer_from_objref(pmins), pointer_from_objref(pmaxs), ndims)
     LibSpatialIndex._checkresult(result, "Couldn't determine bounds of RTree")
+    pmins, pmaxs
+end
+
+function GeoInterface.extent(::GeoInterface.PolygonTrait, AA::AcceleratedArray{T,N,A,RTreeIndex{I}}) where {T,N,A,I}
+    GeoInterface.extent(AA.index)
+end
+function GeoInterface.extent(::GeoInterface.PolygonTrait, R::RTreeIndex{I}) where {I}
+    pmins, pmaxs = _getbounds(R)
     return Extent(X=(pmins[1], pmaxs[1]), Y=(pmins[2], pmaxs[2]))
 end
 
@@ -33,7 +46,8 @@ function Base.isvalid(R::RTreeIndex)
 end
 
 function Base.findfirst(pred::Base.Fix2{typeof(in),Extent{K,V}}, AA::AcceleratedArray{<:Any,<:Any,<:Any,<:RTreeIndex}) where {N,K,V,T}
-    first(findall(pred, AA))  # this will error on empty sets
+    I = findall(pred, AA)
+    length(I) == 0 ? nothing : first(I)
 end
 
 function Base.findall(pred::Base.Fix2{typeof(in),Extent{K,V}}, AA::AcceleratedArray{<:Any,<:Any,<:Any,<:RTreeIndex}) where {N,K,V,T}

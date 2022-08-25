@@ -5,12 +5,21 @@
 # GeoAcceleratedArrays
 Accelerate Arrays using Spatial Indexes.
 
-Combines [AcceleratedArrays](https://github.com/andyferris/AcceleratedArrays.jl) with [LibSpatialIndex](https://github.com/JuliaGeo/LibSpatialIndex.jl).
+Combines [AcceleratedArrays](https://github.com/andyferris/AcceleratedArrays.jl) with [LibSpatialIndex](https://github.com/JuliaGeo/LibSpatialIndex.jl), speeding up area of interest queries, without having to do exact intersections on all geometries.
 Takes inspiration from the Python [rtree](https://github.com/Toblerity/rtree) package.
+
+Note that as the acceleration works by using the extents of geometries, the filtered list of geometries is not guaranteed to intersect, we only guarantee that all intersecting geometries are present.
 
 ## Install
 ```julia
 ] add GeoAcceleratedArrays
+```
+
+## Usage
+Apply a spatial index on a Vector with geometries using `accelerate`, after which one can quickly find the intersecting extents for a given area of interest by `findall` with the `in` predicate.
+```julia
+AA = accelerate(A, RTreeIndex)
+findall(in(aoi), AA)
 ```
 
 ## Example
