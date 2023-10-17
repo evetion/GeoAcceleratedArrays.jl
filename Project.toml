@@ -1,7 +1,7 @@
 name = "GeoAcceleratedArrays"
 uuid = "a1bd0a3b-d31e-42b9-ba04-538dc10eeccf"
 authors = ["Maarten Pronk", "Deltares"]
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 AcceleratedArrays = "44e12807-9a19-5591-91cf-c1b4fb89ce64"
