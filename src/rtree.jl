@@ -25,12 +25,14 @@ GeoInterface.geomtrait(::AcceleratedArray{T,N,A,RTreeIndex{I}}) where {T,N,A,I} 
 GeoInterface.geomtrait(::RTreeIndex) where {I} = GeoInterface.PolygonTrait()
 
 function _getbounds(R::RTreeIndex)
-    pmins = zeros(2)
-    pmaxs = zeros(2)
+    pmins = Ref{Ptr{Float64}}(C_NULL)
+    pmaxs = Ref{Ptr{Float64}}(C_NULL)
     ndims = Ref{UInt32}()
-    result = LibSpatialIndex.C.Index_GetBounds(R.I.index, pointer_from_objref(pmins), pointer_from_objref(pmaxs), ndims)
+    result = LibSpatialIndex.C.Index_GetBounds(R.I.index, pmins, pmaxs, ndims)
     LibSpatialIndex._checkresult(result, "Couldn't determine bounds of RTree")
-    pmins, pmaxs
+    pmins = unsafe_wrap(Array, pmins[], ndims[], own=true)
+    pmaxs = unsafe_wrap(Array, pmaxs[], ndims[], own=true)
+    (pmins, pmaxs)
 end
 
 function GeoInterface.extent(::GeoInterface.PolygonTrait, AA::AcceleratedArray{T,N,A,RTreeIndex{I}}) where {T,N,A,I}
