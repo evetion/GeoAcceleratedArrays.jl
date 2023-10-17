@@ -13,7 +13,7 @@ using Test
 
     acc_polys = accelerate([p1, p2, p3], RTreeIndex)
 
-    @test GeoInterface.extent(acc_polys) isa Extent
+    @test GeoInterface.extent(acc_polys) == Extent(X=(-1.0, 45.0), Y=(-1.0, 45.0))
 
     @test isvalid(acc_polys.index)
 
