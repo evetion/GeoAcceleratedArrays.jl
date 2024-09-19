@@ -19,7 +19,8 @@ Note that as the acceleration works by using the extents of geometries, the filt
 ## Usage
 Apply a spatial index on a Vector with geometries using `accelerate`, after which one can quickly find the intersecting extents for a given area of interest by `findall` with the `in` predicate.
 ```julia
-AA = accelerate(A, RTreeIndex)
+using LibSpatialIndex
+AA = accelerate(A, SpatialIndex{Val{LibSpatialIndex}})
 findall(in(aoi), AA)
 ```
 

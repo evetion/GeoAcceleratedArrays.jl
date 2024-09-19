@@ -3,12 +3,11 @@ module GeoAcceleratedArrays
 # using NearestNeighbors: DataFreeTree, KDTree, injectdata, inrange, HyperSphere, HyperRectangle
 import GeoInterface
 using Extents
-import LibSpatialIndex
-using AcceleratedArrays: accelerate, AbstractUniqueIndex, AcceleratedArray
+using AcceleratedArrays: AbstractUniqueIndex, AcceleratedArray, accelerate, AcceleratedArrays
 
-include("rtree.jl")
+include("spatialindex.jl")
 
-export RTreeIndex
+export SpatialIndex
 export accelerate
 
 end # module

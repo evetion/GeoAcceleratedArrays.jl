@@ -3,22 +3,39 @@ uuid = "a1bd0a3b-d31e-42b9-ba04-538dc10eeccf"
 authors = ["Maarten Pronk", "Deltares"]
 version = "0.2.1"
 
+[weakdeps]
+LibSpatialIndex = "f19c2e90-9d16-5f2d-a2a7-af3fb29e4907"
+SortTileRecursiveTree = "746ee33f-1797-42c2-866d-db2fce69d14d"
+SpatialIndexing = "d4ead438-fe20-5cc5-a293-4fd39a41b74c"
+
 [deps]
 AcceleratedArrays = "44e12807-9a19-5591-91cf-c1b4fb89ce64"
 Extents = "411431e0-e8b7-467b-b5e0-f676ba4f2910"
 GeoInterface = "cf35fbd7-0cd7-5166-be24-54bfbe79505f"
-LibSpatialIndex = "f19c2e90-9d16-5f2d-a2a7-af3fb29e4907"
+
+
+[extensions]
+# name of extension to the left
+# extension dependencies required to load the extension to the right
+# use a list for multiple extension dependencies
+SpatialIndexingExt = "SpatialIndexing"
+SortTileRecursiveTreeExt = "SortTileRecursiveTree"
+LibSpatialIndexExt = "LibSpatialIndex"
+
 
 [compat]
 AcceleratedArrays = "0.3"
 Extents = "0.1"
 GeoInterface = "1"
-LibSpatialIndex = "0.2"
+LibSpatialIndex = "0.2.1"
 julia = "1.6"
 
 [extras]
 LibGEOS = "a90b1aa1-3769-5649-ba7e-abc5a9d163eb"
+LibSpatialIndex = "f19c2e90-9d16-5f2d-a2a7-af3fb29e4907"
+SortTileRecursiveTree = "746ee33f-1797-42c2-866d-db2fce69d14d"
+SpatialIndexing = "d4ead438-fe20-5cc5-a293-4fd39a41b74c"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test", "LibGEOS"]
+test = ["Test", "LibSpatialIndex", "SortTileRecursiveTree", "SpatialIndexing", "LibGEOS"]
