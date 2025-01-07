@@ -1,7 +1,7 @@
 name = "GeoAcceleratedArrays"
 uuid = "a1bd0a3b-d31e-42b9-ba04-538dc10eeccf"
 authors = ["Maarten Pronk", "Deltares"]
-version = "0.2.1"
+version = "0.3.0"
 
 [weakdeps]
 LibSpatialIndex = "f19c2e90-9d16-5f2d-a2a7-af3fb29e4907"
