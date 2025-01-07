@@ -16,7 +16,7 @@ import SpatialIndexing
 
     for library in (LibSpatialIndex, SortTileRecursiveTree, SpatialIndexing)
         @testset "$library" begin
-            acc_polys = accelerate([p1, p2, p3], SpatialIndex{Val{library}})
+            acc_polys = accelerate([p1, p2, p3], library)
             @test acc_polys isa GeoAcceleratedArrays.AcceleratedArray{T,N,A,<:GeoAcceleratedArrays.AbstractSpatialUniqueIndex} where {T,N,A}
 
             @test isgeometry(acc_polys)
@@ -31,7 +31,7 @@ import SpatialIndexing
             @test isvalid(acc_polys.index)
 
             # GeoInterface.testgeometry(RTreeIndex)
-            @test occursin("SpatialIndex using Val{$library}() backend with Exte", summary(acc_polys))
+            @test occursin("SpatialIndex using $library", summary(acc_polys))
 
             aoi = Extents.Extent(X=(0.5, 1), Y=(0.5, 1))
 

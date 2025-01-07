@@ -22,7 +22,7 @@ Apply a spatial index on a Vector with geometries using `accelerate`, after whic
 ```julia
 using GeoAcceleratedArrays
 using LibSpatialIndex
-AA = accelerate(A, SpatialIndex{Val{LibSpatialIndex}})
+AA = accelerate(A, LibSpatialIndex)
 indices = findall(in(area_of_interest), AA)
 ```
 
@@ -39,7 +39,7 @@ p3 = readgeom("MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
 A = [p1, p2, p3];
 
 using LibSpatialIndex # (or SortTileRecursiveTree or SpatialIndexing)
-acc_polys = accelerate(A, SpatialIndex{Val{LibSpatialIndex}})
+acc_polys = accelerate(A, LibSpatialIndex)
 3-element Vector{LibGEOS.AbstractGeometry} + SpatialIndex using Val{LibSpatialIndex}() backend with Extent{(:X, :Y), Tuple{Tuple{Float64, Float64}, Tuple{Float64, Float64}}}((X = (-1.0, 45.0), Y = (-1.0, 45.0))):
  POLYGON ((0 0, 1 0, 1 1, 0 0))
  POLYGON ((0 0, -1 0, -1 -1, 0 0))
