@@ -21,13 +21,10 @@ Base.show(io::IO, ::MIME"text/plain", R::SpatialIndex{M}) where M = print(io, "S
 Base.show(io::IO, ::SpatialIndex{M}) where M = print(io, "SpatialIndex using ", _value(M))
 Base.summary(io::IO, R::SpatialIndex) = show(io::IO, R)
 
-GeoInterface.isgeometry(::Type{<:AcceleratedArray{T,N,A,<:AbstractSpatialUniqueIndex}} where {T,N,A}) = true
-GeoInterface.isgeometry(::Type{<:SpatialIndex}) = true
-GeoInterface.geomtrait(::AcceleratedArray{T,N,A,<:AbstractSpatialUniqueIndex}) where {T,N,A} = GeoInterface.PolygonTrait()
-GeoInterface.geomtrait(::AbstractSpatialUniqueIndex) = GeoInterface.PolygonTrait()
+GeoInterface.isgeometry(::Type{<:AcceleratedArray{T,N,A,<:AbstractSpatialUniqueIndex}} where {T,N,A}) = false
+GeoInterface.isgeometry(::Type{<:SpatialIndex}) = false
 
-
-function GeoInterface.extent(t::GeoInterface.PolygonTrait, AA::AcceleratedArray{T,N,A,<:AbstractSpatialUniqueIndex}) where {T,N,A}
+function GeoInterface.extent(::Nothing, AA::AcceleratedArray{T,N,A,<:AbstractSpatialUniqueIndex}) where {T,N,A}
     GeoInterface.extent(t, AA.index)
 end
 
